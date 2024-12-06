@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Favicon de la página -->
+    <link rel="icon" href="{% static 'imgen/favicon.ico' %}" type="image/x-icon">
+    <title>inicio sesion</title>
+</head>
+<body>
+{% block content %}
+<!-- Menú Superior con Bootstrap -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'inicio' %}">
+            <img src="{% static 'imgen/logo1.png' %}" alt="Logo" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#documentos">Documentos</a></li>
+                <!--<li class="nav-item"><a class="nav-link" href="#precio">Precio</a></li>-->
+                <li class="nav-item"><a class="nav-link" href="#recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success ms-3" href="{% url 'registro' %}">Registro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success ms-3" href="{% url 'login' %}">Inicio sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="d-flex justify-content-center align-items-center vh-50 mt-4">
+    <div class="card p-4" style="width: 22rem;">
+        <div class="text-center mb-2">
+            <img src="{% static 'imgen/login_icon.png' %}" alt="Login Icon" width="72">
+          </div>
+          <h3 class="text-center mb-2">Inicio Sesión</h3>
+    <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+        {% csrf_token %}
+        <div class="text-center mb-4">
+            <!--<label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                Username
+            </label>-->
+            <input placeholder="Nombre Usuario" aria-label="Nombre Usuario" aria-describedby="addon-wrapping" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" name="username" required>
+        </div>
+        <div class="text-center mb-6">
+            <!--<label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                Password
+            </label>-->
+            <input placeholder="Contraseña" aria-label="Contraseña" aria-describedby="addon-wrapping" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="password" required>
+        </div>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember">
+            <label class="form-check-label" for="rememberMe">Recuerdame</label>
+        </div>
+        <div class="flex items-center justify-between">
+            <center><button class="btn btn-primary w-50" type="submit">
+                Ingresar
+            </button></center>
+        </div>
+    </form>
+    <div class="text-center mt-6">
+        <p>No tienes una cuenta? <a href="{% url 'registro' %}">Registrase</a></p>
+    </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

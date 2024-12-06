@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="p-6">
+<div class="w-full">
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Buenos Días, {{ nombre_usuario }}</h1>
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-bold">Documentos</h1>
+        <a href="{% url 'dashboard:crear_documento' %}" class="bg-purple-500 text-white px-4 py-2 rounded-md">
+            + Crear documento
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <!-- Recientes -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Recientes</h2>
+            <div class="space-y-4">
+                {% for doc in documentos_recientes %}
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <h3 class="font-medium">{{ doc.titulo }}</h3>
+                        <p class="text-sm text-gray-500">en documento</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Creado por mi -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Creado por mi</h2>
+            <div class="space-y-4">
+                {% for doc in documentos_recientes %}
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <h3 class="font-medium">{{ doc.titulo }}</h3>
+                        <p class="text-sm text-gray-500">en documento</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de documentos -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+                <div class="flex space-x-4">
+                    <button class="font-medium text-purple-500">Todo</button>
+                    <button class="font-medium text-gray-500">Mis documentos</button>
+                    <button class="font-medium text-gray-500">Compartido</button>
+                    <button class="font-medium text-gray-500">Entorno de Trabajo</button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <input type="text" placeholder="Buscar" class="px-4 py-2 border rounded-md">
+                    <button class="text-gray-500">Filtrar</button>
+                    <button class="text-gray-500">Ordenar</button>
+                </div>
+            </div>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ubicación</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Etiquetas</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha de creación</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha de Actualización</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uso compartido</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for doc in documentos_recientes %}
+                <tr data-id="{{ doc.id }}">
+                    <td class="px-6 py-4">{{ doc.titulo }}</td>
+                    <td class="px-6 py-4">{{ doc.ubicacion|default:"-" }}</td>
+                    <td class="px-6 py-4">{{ doc.etiquetas|default:"-" }}</td>
+                    <td class="px-6 py-4">{{ doc.fecha_creacion|date:"d-m-Y" }}</td>
+                    <td class="px-6 py-4">{{ doc.fecha_actualizacion|date:"d-m-Y"|default:"-" }}</td>
+                    <td class="px-6 py-4">
+                        {% if doc.compartido_con.exists %}
+                        <span class="text-purple-500">Compartido</span>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <a href="{% url 'dashboard:editar_documento' doc.id %}" class="text-blue-600 hover:text-blue-800">Editar</a>
+                            <button onclick="openDeleteModal('{{ doc.id }}', '{{ doc.titulo }}')" class="text-red-600 hover:text-red-800">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Eliminar documento
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                ¿Estás seguro de que deseas eliminar el documento "<span id="documentTitle"></span>"? Esta acción no se puede deshacer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" onclick="deleteDocument()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Eliminar
+                </button>
+                <button type="button" onclick="closeDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification -->
+<div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg hidden">
+    <p id="notificationMessage"></p>
+</div>
+
+<script>
+    let documentIdToDelete = null;
+
+    function openDeleteModal(id, title) {
+        documentIdToDelete = id;
+        document.getElementById('documentTitle').textContent = title;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function deleteDocument() {
+        if (documentIdToDelete) {
+            fetch(`{% url 'dashboard:eliminar_documento' 0 %}`.replace('0', documentIdToDelete), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Documento eliminado con éxito');
+                    // Remove the row from the table
+                    document.querySelector(`tr[data-id="${documentIdToDelete}"]`).remove();
+                } else {
+                    showNotification('Error al eliminar el documento', 'error');
+                }
+                closeDeleteModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error al eliminar el documento', 'error');
+                closeDeleteModal();
+            });
+        }
+    }
+
+    function showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notificationMessage');
+        
+        notification.classList.remove('bg-green-500', 'bg-red-500');
+        notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
+        
+        notificationMessage.textContent = message;
+        notification.classList.remove('hidden');
+        
+        setTimeout(() => {
+            notification.classList.add('hidden');
+        }, 3000);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}
+

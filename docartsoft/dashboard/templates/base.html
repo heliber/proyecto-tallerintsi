@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocArtSoft</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Favicon de la página -->
+    <link rel="icon" href="{% static 'imgen/favicon.ico' %}" type="image/x-icon">
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 h-screen bg-white shadow-md">
+            <div class="p-4">
+                <a href="{% url 'inicio' %}" >
+                    <img src="/static/imgen/logo1.png" alt="DocArtSoft" class="h-10">
+                </a>
+            </div>
+            <nav class="mt-4">
+                <!--<a href="{% url 'dashboard:general' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100 {% if request.resolver_match.url_name == 'general' %}bg-purple-500 text-white{% endif %}">
+                    <span>General</span>
+                </a>-->
+                <a href="{% url 'dashboard:documentos' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100 {% if request.resolver_match.url_name == 'documentos' %}bg-purple-500 text-white{% endif %}">
+                    <span>Documentos</span>
+                </a>
+                <!--<a href="{% url 'dashboard:proyectos' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100 {% if request.resolver_match.url_name == 'proyectos' %}bg-purple-500 text-white{% endif %}">
+                    <span>Proyectos</span>
+                </a>-->
+                <a href="{% url 'dashboard:reporte_documentos' %}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100">
+                    <span>Reporte</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100">
+                    <span>Bandeja de entrada</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100">
+                    <span>Ajustes</span>
+                </a>
+                <a class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100">
+                    <form id="logout-form" method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-sm">Cerrar sesión</button>
+                    </form>
+                </a>
+                    
+              
+            </nav>
+        </aside>
+
+
+        <!-- Main content -->
+        <main class="flex-1 p-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

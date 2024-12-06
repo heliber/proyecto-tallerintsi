@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Buenos Días, {{ nombre_usuario }}</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!--Recientes -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Recientes</h2>
+            <div class="space-y-4">
+                {% for proyecto in proyectos_recientes %}
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <h3 class="font-medium">{{ proyecto.nombre }}</h3>
+                        <p class="text-sm text-gray-500">{{ proyecto.estado }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>       
+        </div>
+        <!-- Agenda -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Agenda</h2>
+            <div class="text-center py-8">
+                <button class="bg-purple-500 text-white px-4 py-2 rounded-md">
+                    + Agregar integraciones con el calendario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trabajo -->
+    <div class="mt-8 bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Trabajo</h2>
+        <div class="border-b pb-4 mb-4">
+            <div class="flex space-x-4">
+                <button class="font-medium text-purple-500">Pendientes</button>
+                <button class="font-medium text-gray-500">Listo</button>
+                <button class="font-medium text-gray-500">Delegado</button>
+            </div>
+        </div>
+        <div class="space-y-4">
+            <p class="text-gray-500">No hay tareas pendientes</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

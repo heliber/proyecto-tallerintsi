@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Crear Documento</h1>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                </button>
+                <button class="text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="{{ form.titulo.id_for_label }}" class="block text-sm font-medium text-gray-700">Título</label>
+                {{ form.titulo }}
+            </div>
+            <div>
+                <label for="{{ form.contenido.id_for_label }}" class="block text-sm font-medium text-gray-700">Contenido</label>
+                {{ form.contenido }}
+            </div>
+            <div>
+                <label for="{{ form.etiquetas.id_for_label }}" class="block text-sm font-medium text-gray-700">Etiquetas</label>
+                {{ form.etiquetas }}
+            </div>
+            <div>
+                <label for="{{ form.ubicacion.id_for_label }}" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                {{ form.ubicacion }}
+            </div>
+            <div class="flex justify-end space-x-4">
+                
+                <!--<button type="button" class="px-4 py-2 border rounded-md text-gray-700" href="{% url 'dashboard:documentos' %}">Cancelar</button>-->
+                <a href="{% url 'dashboard:documentos' %}" class="px-4 py-2 border rounded-md text-gray-700">Cancelar</a>
+                <button type="submit" class="px-4 py-2 bg-purple-500 text-white rounded-md">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
