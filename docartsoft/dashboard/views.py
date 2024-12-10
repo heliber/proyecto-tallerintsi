@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-from django.utils import timezone
+#from django.contrib.auth import login, authenticate
+#from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import Documento, Proyecto
@@ -9,11 +9,14 @@ from .forms import DocumentoForm, RegistroForm, ProyectoForm
 #from django.views.generic import TemplateView
 #from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+#from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from .models import Notificacion
+from django.contrib.auth.decorators import login_required # bandeja de entrada
+
 
 #class HomePageView(TemplateView):
     #template_name = "inicio.html"  # Asegúrate de que esta plantilla exista
@@ -36,6 +39,12 @@ def registro(request):
     else:
         form = RegistroForm()
     return render(request, 'registro.html', {'form': form})
+
+def nosotros(request):
+    return render(request, 'nosotros.html')
+
+def informacion(request):
+    return render(request, 'informacion.html')
 
 @login_required
 def general(request):
@@ -76,17 +85,39 @@ def crear_documento(request):
 # codigo para editar documento y eliminar documento
 
 @login_required
+#def editar_documento(request, documento_id):
+#    documento = get_object_or_404(Documento, id=documento_id, creado_por=request.user)
+#    if request.method == 'POST':
+#        form = DocumentoForm(request.POST, instance=documento)
+#        if form.is_valid():
+#            form.save()
+#            messages.success(request, 'Documento actualizado exitosamente.')
+#            return redirect('dashboard:documentos')
+#    else:
+#        form = DocumentoForm(instance=documento)
+    
+#    return render(request, 'editar_documento.html', {'form': form, 'documento': documento})
+
+# se modifico para bandeja de entrada al editar el documento
 def editar_documento(request, documento_id):
-    documento = get_object_or_404(Documento, id=documento_id, creado_por=request.user)
+    documento = get_object_or_404(Documento, id=documento_id)
     if request.method == 'POST':
         form = DocumentoForm(request.POST, instance=documento)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Documento actualizado exitosamente.')
+            
+            # Crear notificación para los usuarios
+            usuarios = User.objects.all()  # Define a qué usuarios notificar
+            for usuario in usuarios:
+                Notificacion.objects.create(
+                    usuario=usuario,
+                    mensaje=f'El documento "{documento.titulo}" ha sido editado.',
+                    documento=documento
+                )
+            messages.success(request, 'El documento ha sido actualizado.')
             return redirect('dashboard:documentos')
     else:
         form = DocumentoForm(instance=documento)
-    
     return render(request, 'editar_documento.html', {'form': form, 'documento': documento})
 
 @login_required
@@ -159,3 +190,25 @@ def generar_reporte_pdf(request):
     if pisa_status.err:
         return HttpResponse('Hubo un error al generar el PDF', status=500)
     return response
+
+@login_required
+#def bandeja_entrada(request):
+#    notificaciones = request.user.notificaciones.all().order_by('-fecha_creacion')
+#    return render(request, 'bandeja_entrada.html', {'notificaciones': notificaciones})
+def bandeja_entrada(request):
+    notificaciones = Notificacion.objects.all()
+    documentos = Documento.objects.all()  # Asegúrate de incluir los documentos
+    return render(request, 'bandeja_entrada.html', {
+        'notificaciones': notificaciones,
+        'documentos': documentos
+    })
+
+@login_required
+#def detalle_documento(request, documento_id):
+#    # Lógica para obtener el documento por su ID
+#    documento = get_object_or_404(Documento, id=id)
+#    return render(request, 'detalle_documento.html', {'documento': documento})
+def detalle_documento(request, documento_id):
+    documento = get_object_or_404(Documento, id=documento_id)
+    return render(request, 'detalle_documento.html', {'documento': documento})
+

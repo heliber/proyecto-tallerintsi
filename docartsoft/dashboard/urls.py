@@ -2,6 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from . import views
 from .views import generar_reporte_pdf
+from .views import bandeja_entrada
 
 app_name = 'dashboard'
 
@@ -20,4 +21,8 @@ urlpatterns = [
     path('proyectos/<int:proyecto_id>/', views.detalle_proyecto, name='detalle_proyecto'),
     path('proyectos/eliminar/<int:proyecto_id>/', views.eliminar_proyecto, name='eliminar_proyecto'),
     path('reporte-documentos/', generar_reporte_pdf, name='reporte_documentos'),
+    path('bandeja-entrada/', views.bandeja_entrada, name='bandeja_entrada'), #bandeja entrada
+    path('detalle/<int:documento_id>/', views.detalle_documento, name='detalle_documento'), # bandeja entrada
+    path('nosotros/', views.nosotros, name='nosotros'), # pagina de informacion de nosotros
+    path('informacion/', views.informacion, name='informacion'), # pagina de informacion de documentacion
 ]

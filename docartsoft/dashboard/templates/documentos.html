@@ -2,6 +2,17 @@
 
 {% block content %}
 
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
 <div class="p-6">
 <div class="w-full">
 <div class="max-w-6xl mx-auto">
@@ -217,5 +228,5 @@
         return cookieValue;
     }
 </script>
-{% endblock %}
 
+{% endblock %}

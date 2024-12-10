@@ -1,0 +1,30 @@
+<!-- bandeja_entrada.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-6">Bandeja de Entrada</h1>
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        {% if notificaciones %}
+            <ul class="divide-y divide-gray-200">
+                {% for notificacion in notificaciones %}
+                    <li class="py-4">
+                        <div class="flex justify-between">
+                            <p class="text-gray-700">{{ notificacion.mensaje }}</p>
+                            <span class="text-sm text-gray-500">{{ notificacion.fecha_creacion|date:"d M Y H:i" }}</span>
+                        </div>
+                        {% if notificacion.documento %}
+                        <a href="{% url 'dashboard:detalle_documento' notificacion.documento.id %}" class="text-blue-500 hover:underline">
+                            Ver Documento
+                        </a>
+                        
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500">No tienes notificaciones.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

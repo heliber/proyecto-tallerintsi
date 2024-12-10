@@ -7,30 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Favicon de la página -->
     <link rel="icon" href="{% static 'imgen/favicon.ico' %}" type="image/x-icon">
-    <title>Inicio</title>
-    <style>
-        .hero {
-            background: url("{% static 'imgen/hero-background.png' %}") center/cover no-repeat;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-        }
-        .card img {
-            border-radius: 5px;
-        }
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-        }
-        .footer-links a:hover {
-            color: white;
-            text-decoration: underline;
-        }
-    </style>
+    <title>Información</title>
+    
 </head>
 <body>
-{% block content %}
-
-<!-- Menú Superior con Bootstrap -->
+    {% block content %}
+    <!-- Menú Superior con Bootstrap -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'inicio' %}">
@@ -42,7 +24,7 @@
         {% if user.is_authenticated %}
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="documentos">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:documentos' %}">Documentos</a></li>
                 <!--<a class="flex items-center px-4 py-2 text-gray-700 hover:bg-purple-100"> </a>-->
                 <li class="nav-item">
                     <span class="nav-link">Bienvenido, {{ user.username }}!</span>
@@ -77,64 +59,46 @@
         </div>
     </div>
 </nav>
-
-<!-- Hero Section -->
-<div class="hero d-flex align-items-center justify-content-center" style="height: 80vh;">
-    <div class="text-center">
-        <h1 class="display-4 fw-bold">Documenta tus proyectos como un profesional</h1>
-        <p class="lead">La mejor solución para organizar y mantener tu documentación de software.</p>
+     
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Documentación de Artefactos de Software</h1>
+    
+    <div class="prose prose-indigo max-w-none">
+        <p class="mb-4">La documentación de artefactos de software es un proceso crucial en el desarrollo de software que implica la creación, mantenimiento y gestión de documentos que describen varios aspectos de un sistema de software.</p>
         
-       <!-- <ul>
-            <li>
-                <a href="{% url 'registro' %}" class="btn btn-primary btn-lg mt-3">Comienza Ahora</a>
-            </li>
-        </ul>-->
-                     
+        <h2 class="text-2xl font-bold mt-8 mb-4">¿Qué son los artefactos de software?</h2>
+        <p>Los artefactos de software son documentos, diagramas, modelos y otros elementos producidos durante el proceso de desarrollo de software. Estos pueden incluir:</p>
+        <ul class="list-disc pl-5 mb-4">
+            <li>Especificaciones de requisitos</li>
+            <li>Diseños de arquitectura</li>
+            <li>Diagramas UML</li>
+            <li>Código fuente</li>
+            <li>Planes de prueba</li>
+            <li>Manuales de usuario</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Importancia de la documentación</h2>
+        <p>Una buena documentación de artefactos de software es esencial por varias razones:</p>
+        <ul class="list-disc pl-5 mb-4">
+            <li>Facilita la comunicación entre los miembros del equipo</li>
+            <li>Ayuda en el mantenimiento y la evolución del software</li>
+            <li>Proporciona una referencia para futuros desarrollos</li>
+            <li>Asiste en la capacitación de nuevos miembros del equipo</li>
+            <li>Puede ser un requisito para cumplir con estándares de la industria o regulaciones</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Mejores prácticas</h2>
+        <p>Para una documentación efectiva de artefactos de software, considere las siguientes mejores prácticas:</p>
+        <ul class="list-disc pl-5 mb-4">
+            <li>Mantenga la documentación actualizada y sincronizada con el código</li>
+            <li>Use herramientas de control de versiones para la documentación</li>
+            <li>Haga que la documentación sea accesible para todo el equipo</li>
+            <li>Use un lenguaje claro y conciso</li>
+            <li>Incluya diagramas y ejemplos cuando sea apropiado</li>
+            <li>Revise y actualice la documentación regularmente</li>
+        </ul>
     </div>
 </div>
-
-<!-- Información Importante -->
-<section class="container py-5">
-    <h2 class="text-center mb-5">¿Por qué usar DocArtSoft?</h2>
-    <div class="row g-4">
-        <div class="col-md-3">
-            <div class="card h-100 text-center shadow-sm">
-                <i class="bi bi-file-earmark-text display-3 text-primary mt-3"></i>
-                <div class="card-body">
-                    <h5 class="card-title">Documentación</h5>
-                    <p class="card-text">Organiza y gestiona todos los documentos de tu proyecto con facilidad.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100 text-center shadow-sm">
-                <i class="bi bi-diagram-3 display-3 text-success mt-3"></i>
-                <div class="card-body">
-                    <h5 class="card-title">Diagramas</h5>
-                    <p class="card-text">Crea diagramas interactivos para visualizar los procesos de tu proyecto.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100 text-center shadow-sm">
-                <i class="bi bi-server display-3 text-warning mt-3"></i>
-                <div class="card-body">
-                    <h5 class="card-title">Base de Datos</h5>
-                    <p class="card-text">Administra tus datos de manera eficiente y segura.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100 text-center shadow-sm">
-                <i class="bi bi-clock-history display-3 text-danger mt-3"></i>
-                <div class="card-body">
-                    <h5 class="card-title">Ciclo de Vida</h5>
-                    <p class="card-text">Sigue todas las etapas del desarrollo de software sin perder detalles.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Footer -->
 <footer class="bg-dark text-white py-4">
@@ -151,7 +115,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-{% endblock %}
-
+{% endblock %}  
 </body>
 </html>

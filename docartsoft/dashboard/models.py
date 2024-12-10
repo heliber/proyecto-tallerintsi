@@ -31,3 +31,14 @@ class Proyecto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+# bandeja de entrada 
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificaciones')
+    mensaje = models.TextField()
+    documento = models.ForeignKey('Documento', on_delete=models.CASCADE, null=True, blank=True)  # Relación con documento editado
+    leido = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Notificación para {self.usuario.username}'
